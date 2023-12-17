@@ -1,5 +1,7 @@
-import React, {useState, useEffect} from "react";
-import axios, {AxiosResponse} from "axios";
+import React from "react";
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+dayjs.extend(relativeTime)
 
 const Comment = (props) => {
   const { comment } = props
@@ -9,6 +11,7 @@ return (
         <audio controls>
           <source src={comment.soundUrl} type="audio/webm" />
         </audio>
+        <div>{dayjs(comment.createdAt).fromNow()}</div>
         
   </div>
 )

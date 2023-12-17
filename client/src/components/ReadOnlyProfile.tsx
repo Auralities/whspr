@@ -7,6 +7,8 @@ import WaveSurferComponent from './WaveSurfer';
 const ReadOnlyProfile = ({audioContext}) => {
     const [selectedUserInfo, setSelectedUserInfo] = useState<any>()
     const [following, setFollowing] = useState<boolean>(false)
+    const [onProfile, setOnProfile] =useState<boolean>(true)
+
     //const [userPosts, setUserPosts]  = useState<any>()
     const { id } = useParams();
     const user:any = useLoaderData()
@@ -20,7 +22,20 @@ const ReadOnlyProfile = ({audioContext}) => {
         console.error('could not get selected user info', error)
       }
     }
-
+    const updatePost = async(postId, updateType) => {
+      try{
+          const updatedPost:any = await axios.get(`/post/updatedPost/${postId}/${user.id}`)
+          console.log('updated post obj', updatedPost)
+          const postIndex = selectedUserInfo.findIndex((post) => post.id === updatedPost.data.id)
+          updatedPost.data.rank = selectedUserInfo[postIndex].rank
+          //console.log('post index', updatePostIndex)
+          const postsWUpdatedPost = selectedUserInfo.toSpliced(postIndex, 1, updatedPost.data )
+          console.log(postsWUpdatedPost)
+          setSelectedUserInfo(postsWUpdatedPost)
+      } catch(error){
+          console.log('could not update post', error)
+      }
+  }
     const startFollowing = async () => {
       try{
         const createFollowing = await axios.post('/post/startFollowing', {userId: user.id, followingId:id})
@@ -32,8 +47,35 @@ const ReadOnlyProfile = ({audioContext}) => {
 
       }
     }
+
+    const stopFollowing = async () => {
+      try{
+        const createFollowing = await axios.delete(`/post/stopFollowing/${user.id}/${id}`)
+        if(createFollowing.data === 'Created'){
+          setFollowing(false)
+        }
+      }catch(error){
+        console.error('could not follow user', error)
+
+      }
+    }
+
+    const isFollowing = async () => {
+      try{
+        const findFollowing = await axios.get(`/post/isFollowing/${user.id}/${id}`)
+        if(findFollowing.status === 200){
+          setFollowing(true)
+        }
+      }catch(error: any){
+        if(error.response.status === 404){
+          setFollowing(false)
+        }
+        console.log('following error', error)
+      }
+    }
     useEffect(() => {
       getSelectedUserInfo()
+      isFollowing()
     }, [])
     return (
         <div className="user-main">
@@ -51,7 +93,7 @@ const ReadOnlyProfile = ({audioContext}) => {
                 {following ? 
                 <button
                 className='btn btn-light'
-                // onClick={() => startFollowing()}
+                onClick={() => stopFollowing()}
                 >Unfollow</button>
                 : <button
                 className='btn btn-light'
@@ -61,11 +103,21 @@ const ReadOnlyProfile = ({audioContext}) => {
             <div>
               {selectedUserInfo.map((post) => (
                 <div>
-                <WaveSurferComponent postObj={post} audioUrl={post.soundUrl} postId={post.id} />
+                <WaveSurferComponent
+                postObj={post}
+                audioUrl={post.soundUrl}
+                postId={post.id}
+                userId={user.id}
+                getPosts={getSelectedUserInfo}
+                onProfile={onProfile}
+                updatePost={updatePost}
+                setOnProfile={setOnProfile}
+                />
                 <Post
                   key = {post.id}
                   postObj = {post}
                   audioContext={audioContext}
+                  updatePost={updatePost}
                   user={user}
                 />
                 {/* each post should have its own instance of a waveSurfer comp */}

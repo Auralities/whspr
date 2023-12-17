@@ -16,8 +16,7 @@ const Oscillator = ({oscSettings, changeType, changeValue}: Props): React.JSX.El
 
   return (
     <Container className="">
-      <Card className="w-75 mx-auto">
-        <h4 className="text-center">Oscillator</h4>
+        <h5 className="text-center">Select wave type</h5>
         <Stack direction="horizontal" gap={2} className="mx-5 mb-3 typeCard">
           <Button className={`${type === 'sine' && 'active'}`} variant="secondary" id="sine" onClick={changeType}>
             Sine
@@ -42,7 +41,6 @@ const Oscillator = ({oscSettings, changeType, changeValue}: Props): React.JSX.El
             <input  value={detune} max="150" min="-150" onChange={changeValue} id="detune" type="range" />
           </div>
         </Stack>
-      </Card>
     </Container>
   );
 };

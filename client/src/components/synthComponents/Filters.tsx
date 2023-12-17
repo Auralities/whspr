@@ -1,6 +1,7 @@
 import React from 'react';
 import Tuna from 'tunajs';
 import SynthVoice from './SynthVoice';
+import * as Tone from 'tone';
 
 interface Props {
   audioContext: AudioContext
@@ -8,8 +9,10 @@ interface Props {
   title: string
 }
 
-const Filters = ({ title, audioContext, userId }: Props) => {
-  const tuna = new Tuna(audioContext); // this is working
+const Filters = ({ audioContext, userId }: Props) => {
+  const tuna = new Tuna(audioContext);
+  Tone.setContext(audioContext);
+  console.log(audioContext, Tone.context);
 
   const defaultSettings = {
     lowPassFrequency: 350,
@@ -91,9 +94,14 @@ const Filters = ({ title, audioContext, userId }: Props) => {
     }),
   }
 
+  const notes1: string[] = ['G#4', 'E4', 'G#4', 'A#4', 'B4', 'A#4', 'G#4', 'E4', 'D#4'];
+  const sampleSynth = new Tone.MonoSynth();
+
   return (
     <div>
       <SynthVoice
+        sampleSynth={sampleSynth}
+        notes1={notes1}
         audioContext={audioContext}
         userId={userId}
         robot={robot}

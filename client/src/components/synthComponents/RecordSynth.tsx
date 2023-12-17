@@ -51,11 +51,11 @@ const RecordSynth = ({ title, audioContext, finalDest, mediaDest, start, stop, u
       formData.append('title', title)
       formData.append('category', 'music')
       const response = await axios.post(`/upload`, formData);
-      if(response.status === 200){
-        console.log('Synth saved to cloud')
-      }else{
-        console.error('Error saving synth', response.statusText)
-      }
+      response.status === 200
+      ?
+      console.log('Synth saved to cloud')
+      :
+      console.error('Error saving synth', response.statusText);
     } catch(error) {
       console.error('Error saving audio', error);
     }

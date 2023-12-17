@@ -8,7 +8,8 @@ const db = new Sequelize({
   dialect: 'postgres',
   username: 'postgres',
   database: 'whspr',
-  password: 'ok'
+  password: 'ok',
+  logging: false
 })
 // interface User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
 //   id: CreationOptional<number>;
@@ -189,7 +190,7 @@ MagicConch.belongsTo(User, { foreignKey: 'receivingUserId' })
 User.hasMany(Like, {foreignKey: 'userId'})
 Like.belongsTo(User, { foreignKey: 'userId', as: 'user' })
 Post.hasMany(Like, {foreignKey: 'postId'})
-Like.belongsTo(Post, { foreignKey: 'postId', as: 'post' })
+Like.belongsTo(Post, { foreignKey: 'postId'})
 
 User.hasMany(Listen, {foreignKey: 'userId'})
 Listen.belongsTo(User, { foreignKey: 'userId'})

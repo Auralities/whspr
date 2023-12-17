@@ -1,3 +1,4 @@
+
 import React, {useEffect} from 'react';
 import {
     Route,
@@ -23,24 +24,10 @@ import Search from './Search';
 import axios from 'axios';
 import aa from 'search-insights'
 import { v4 as uuidv4 } from 'uuid';
-import { createInsightsMiddleware } from 'instantsearch.js/es/middlewares';
-
+import {WhsprAI} from './WhsprAI';
 
 // THE MAIN audio context to be used throughout the application (DO NOT ALTER)
 export const audioContext: AudioContext = new AudioContext();
-// algolia initialization
-aa('init', {
-    appId: '2580UW5I69',
-    apiKey: '32b038f1c55d83bac4be0f41a0c07524'
-})
-const generateUserToken = (): string => {
-    return uuidv4();
-};
-
-const userToken = generateUserToken();
-
-aa('setUserToken', userToken)
-
 
 const App = () => {
     const getUserLoader = async () => {
@@ -61,6 +48,7 @@ const App = () => {
                 <Route path="/" element={<Login />} />
                 <Route path="/protected" element={<PrivateRoutes />} >
                     <Route path="dashboard" element={<WaveSurferComponent />} /> // Outlet is a placeholder for child routes to be rendered
+                    <Route path="WhsprAI" element={<WhsprAI audioContext={audioContext}/>} />
                     <Route path="search" element={<Search />} />
                     <Route path="profile" element={<UserProfile />} loader={() => getUserLoader()}/>
                     <Route path="feed" element={<Feed audioContext={audioContext} />} loader={() => getUserLoader()}/>
@@ -78,3 +66,4 @@ const App = () => {
 }
 
 export default App;
+

@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Stack, Button, Container } from 'react-bootstrap';
-import axios from 'axios';
+import PostSynth from './PostSynth';
+import * as Tone from 'tone';
 
 interface Props {
   audioContext: AudioContext;
@@ -13,7 +14,9 @@ interface Props {
     highPassFrequency: number
     lowPassType: any // these need to be refactored to the proper types
     highPassType: any
-    }
+  }
+  notes1: string[]
+  sampleSynth: any
 }
 
 interface Constraints {
@@ -24,19 +27,20 @@ interface Constraints {
   video: boolean
 }
 
-const SynthVoice = ({ audioContext, userId, robot, wobbly, alien, defaultSettings }: Props) => {
+const SynthVoice = ({ notes1, sampleSynth, audioContext, userId, robot, wobbly, alien, defaultSettings }: Props) => {
   const [isRecording, setIsRecording] = useState(false)
   const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
   const audio = useRef<AudioBufferSourceNode | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const mediaRecorder = useRef<MediaRecorder | null>(null)
   const destination: MediaStreamAudioDestinationNode = audioContext.createMediaStreamDestination();
-  const [ filter, setFilter ] = useState(defaultSettings)
-  const [title, setTitle] = useState('');
+  const [ filter, setFilter ] = useState(defaultSettings);
+  const [ addSynth, setAddSynth ] = useState(false);
+  const [bgColor, setBgColor] = useState('secondary')
 
-  const handleEdit = (e: any) => {
-    setTitle(e.target.value);
-  };
+  useEffect(() => {
+    setAddSynth(false);
+  },[])
 
   const lowpass: BiquadFilterNode = audioContext.createBiquadFilter();
   lowpass.frequency.value = filter.lowPassFrequency;
@@ -54,13 +58,19 @@ const SynthVoice = ({ audioContext, userId, robot, wobbly, alien, defaultSetting
     video: false
   }
 
+  
   const startRecording = async () => {
     try {
       setAudioChunks([]);
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       mediaRecorder.current = new MediaRecorder(destination.stream);
       const source = audioContext.createMediaStreamSource(stream);
-      // filter audioNodes
+      const poly: Tone.PolySynth = new Tone.PolySynth(Tone.Synth).toDestination();
+      if (addSynth) {
+        poly.volume.value = -2;
+        poly.connect(lowpass).connect(destination);
+        poly.triggerAttack(['C#3', 'F3', 'C3'], 3);
+      }
       if (filter !== defaultSettings) {
         let options: any = Object.values(filter).slice(4)
         source.connect(lowpass)
@@ -70,13 +80,14 @@ const SynthVoice = ({ audioContext, userId, robot, wobbly, alien, defaultSetting
         options[1].connect(options[2])
         options[2].connect(destination);
       } else { source.connect(destination) }
-
       mediaRecorder.current.ondataavailable = (event) => {
         if (event.data.size > 0) {
           setAudioChunks((prevChunks) => [...prevChunks, event.data]);
         }
       }
-
+      mediaRecorder.current.onstop = () => {
+        poly.disconnect()
+      };
       mediaRecorder.current.start();
       setIsRecording(true);
     } catch (error) {
@@ -84,7 +95,6 @@ const SynthVoice = ({ audioContext, userId, robot, wobbly, alien, defaultSetting
     }
   };
 
-  //stop the recording process
   const stopRecording = async () => {
     if (mediaRecorder.current?.state === 'recording') {
       mediaRecorder.current.stop();
@@ -109,7 +119,6 @@ const SynthVoice = ({ audioContext, userId, robot, wobbly, alien, defaultSetting
         audio.current = audioContext.createBufferSource()
         audio.current.buffer = buffer
         audio.current.connect(audioContext.destination);
-
         audio.current.onended = () => {
           setIsPlaying(false)
         }
@@ -135,60 +144,31 @@ const SynthVoice = ({ audioContext, userId, robot, wobbly, alien, defaultSetting
     setAudioChunks([])
   };
 
-  const saveAudioToGoogleCloud = async () => {
-    let postTitle = title;
-    setTitle('');
-    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' })
-    try {
-      const formData = new FormData()
-      formData.append('audio', audioBlob)
-      formData.append('userId', userId)
-      formData.append('title', postTitle)
-      formData.append('category', 'Voice Synth')
-      const response = await axios.post(`/upload`, formData)
-      response.status === 200 ? console.info('Audio saved successfully') : console.error('Error saving audio', response.statusText);
-    } catch (error) {
-      console.error('Error saving audio:', error)
-    }
-  }
+    // POLISHING FOR EACH BUTTON
+  // const filterSetter = (filter: any) => {
+  //   setFilter(filter);
+  //   bgColor === 'secondary' ? setBgColor('danger') : setBgColor('secondary');
+  // };
 
   return (
-    <Container className="text-center my-3 pb-3">
-      <input className="mb-2" type="text" value={title} onChange={handleEdit} />
+    <Container className="text-center my-3 pb-1">
+      <h5>Try out our new voice filters!</h5>
+      <PostSynth isRecording={isRecording} audioChunks={audioChunks} userId={userId} />
       <Stack direction="horizontal" className="mx-5 mb-3 typeCard">
         <Button className="mx-2 btn-secondary" disabled={filter === defaultSettings} onClick={() => setFilter(defaultSettings)}>Default</Button>
         <Button className="mx-2 btn-secondary" disabled={filter === alien} onClick={() => setFilter(alien)}>Alien</Button>
         <Button className="mx-2 btn-secondary" disabled={filter === wobbly} onClick={() => setFilter(wobbly)}>Wobbly</Button>
         <Button className="mx-2 btn-secondary" disabled={filter === robot} onClick={() => setFilter(robot)}>Robot</Button>
+        <Button className="mx-2" variant={bgColor} onClick={() => {
+          addSynth === false ? setAddSynth(true) : setAddSynth(false);
+          bgColor === 'secondary' ? setBgColor('danger') : setBgColor('secondary');
+          }}>Synth/Voice</Button>
       </Stack>
       <Stack direction="horizontal" className="mx-5 mb-3 typeCard">
-      <button
-            className="record-button"
-            onClick={startRecording}
-            disabled={isRecording}
-            ><img src={require('../../style/recordbutton.png')} /></button>
-            <button
-            className="play-button"
-            onClick={playAudio}
-            disabled={isPlaying || audioChunks.length === 0 }
-            ><img src={require('../../style/playbutton.png')} /></button>
-            <button
-            className="stop-button"
-            onClick={isRecording ? stopRecording : stopPlaying}
-            disabled={!isRecording && !isPlaying}
-            ><img src={require('../../style/stopbutton.png')} /></button>
-            <button
-            className="delete-button"
-            onClick={emptyRecording}
-            disabled={audioChunks.length === 0 || isRecording}
-            ><img src={require('../../style/deletebutton.png')} /></button>
-            <button
-            className="post-button"
-            onClick={()=>{
-              saveAudioToGoogleCloud()}
-            }
-            disabled={audioChunks.length === 0 || isRecording}
-            ><img src={require('../../style/postbutton.png')} /></button>
+      <button className="record-button mx-2" onClick={startRecording} disabled={isRecording}><img src={require('../../style/recordbutton.png')} /></button>
+      <button className="play-button mx-2" onClick={playAudio} disabled={isPlaying || audioChunks.length === 0 }><img src={require('../../style/playbutton.png')} /></button>
+      <button className="stop-button mx-2" onClick={isRecording ? stopRecording : stopPlaying} disabled={!isRecording && !isPlaying}><img src={require('../../style/stopbutton.png')} /></button>
+      <button className="delete-button mx-2" onClick={emptyRecording} disabled={audioChunks.length === 0 || isRecording}><img src={require('../../style/deletebutton.png')} /></button>
       </Stack>
     </Container>
   );

@@ -3,15 +3,21 @@ import RecordPlugin from 'wavesurfer.js/dist/plugins/record'
 import RegionsPlugin from 'wavesurfer.js/dist/plugins/regions.js';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+dayjs.extend(relativeTime)
 interface WaveSurferProps {
     audioUrl: string;
     postId: number;
     postObj: any;
     userId: number;
+    getPosts: any;
+    updatePost: any;
+    onProfile: boolean;
+    setOnProfile: any;
 }
 
-const WaveSurferComponent: React.FC<WaveSurferProps> = ({ postObj, audioUrl, postId, userId}) => {
+const WaveSurferComponent: React.FC<WaveSurferProps> = ({ postObj, audioUrl, postId, userId, getPosts, updatePost, onProfile, setOnProfile}) => {
     const [wave, setWave] = useState<WaveSurfer | null>(null);
     const [display, setDisplay] = useState<boolean>(false); 
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -57,7 +63,8 @@ const WaveSurferComponent: React.FC<WaveSurferProps> = ({ postObj, audioUrl, pos
             try {
                 const addListen = await axios.post('/post/listen', {userId, postId})
                 const updateListenCount = await axios.put('/post/updateCount', {column: 'listenCount', type: 'increment', id: postId})
-                await console.log('complete', updateListenCount, addListen)
+                await updatePost(postId, userId)
+                console.log('complete', updateListenCount, addListen)
             }catch(error){
 
             }
@@ -84,9 +91,25 @@ const WaveSurferComponent: React.FC<WaveSurferProps> = ({ postObj, audioUrl, pos
         <div  className="card">
             <br/>
             <div className="card-body" >
-                <a href={`profile/${postObj.user.id}`} className="card-link">{postObj.user.username}</a>
+                {onProfile
+                    ? <a></a>
+                    : <a href={`profile/${postObj.user.id}`} className="card-link">{postObj.user.username}</a>
+                    }
                 <h3>{postObj.title}</h3>
+                {/* <div>{postObj.rank}</div> */}
                 <div id={containerId}></div>
+                {postObj.categories 
+                ?postObj.categories.map((cat) => (
+                <button 
+                    className="btn btn-link" 
+                    onClick={() => getPosts('explore', cat)}
+                    >{`#${cat}`}</button>))
+                :<div></div>
+                }
+                <div>{dayjs(postObj.createdAt).fromNow()}</div>
+                {postObj.listenCount 
+                ?<div>{`listens: ${postObj.listenCount}`}</div>
+                :<div>Be the first to listen!</div>}
             {isPlaying ?
                 <button type='button' className="btn btn-danger" id="play-btn" onClick={() => {
                     if (wave) {
