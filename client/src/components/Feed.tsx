@@ -101,12 +101,12 @@ const updatePost = async(postId, updateType) => {
         >Explore</button>
       </div>}
         {/* {feed === 'explore' ?  */}
-      <Nav variant="tabs" >
+      <Nav variant="tabs" style={{margin: '15px'}} >
         <Nav.Item>
-            <Nav.Link onClick={() => getPosts('explore', 'none')} active={isExplore}>Explore</Nav.Link>
+            <Nav.Link id='nav' onClick={() => getPosts('explore', 'none')} active={isExplore}>Explore</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-            <Nav.Link onClick={() => getPosts('following', 'none')} active={isFollowFeed}>Following</Nav.Link>
+            <Nav.Link id='nav' onClick={() => getPosts('following', 'none')} active={isFollowFeed}>Following</Nav.Link>
         </Nav.Item>
       </Nav >
     {/* //  : <Nav variant="tabs" >

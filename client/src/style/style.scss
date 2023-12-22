@@ -14,10 +14,10 @@
 }
 
 body {
-    background-image: url('./background.png');
+    background-image: url('./mirrored.png');
     background-color: #606060;
-    background-repeat:initial, repeat-y
-    // background-size: 300px 100px;
+    background-repeat:repeat-y
+    //background-size: auto
 
 }
 @mixin blur($radius) {
@@ -35,10 +35,43 @@ body {
   @include blur(4.2px);
   border: 1px solid rgba(236, 210, 210, 0.36);
 }
+.nav-link {
+  color: #e1e1e5;
+  background: rgba(233, 236, 243, 0.124);
+  //opacity: 60%;
+  //border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  @include blur(4.2px);
+  border: 1px solid rgba(236, 210, 210, 0.36);
+ 
+}
+.nav-link:active {
+  color: #0f0c0c;
+ // background: rgba(233, 236, 243, 0.649);
+ background: rgba(5, 73, 233, 0.649);
+  //opacity: 60%;
+  //border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  @include blur(4.2px);
+  border: 1px solid rgba(236, 210, 210, 0.36);
+ 
+}
+.nav-tabs {
+  border-color:rgba(233, 236, 243, 0.124);
+}
+
 #header {
-  background: rgba(233, 236, 243, 0.449);
+  background: rgba(233, 236, 243, 0.261);
   //opacity: 60%;
   border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  @include blur(4.2px);
+  border: 1px solid rgba(233, 236, 243, 0.449);
+}
+#tag {
+  background: rgba(233, 236, 243, 0.241);
+  //opacity: 60%;
+  border-radius: 6px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
   @include blur(4.2px);
   border: 1px solid rgba(236, 210, 210, 0.36);

@@ -7,9 +7,9 @@ import WaveSurferSimple from "./WaveSurferSimple";
 const Comment = (props) => {
   const { comment, audioContext } = props;
   return (
-    <div className="d-flex flex-column">
-      <div className="d-flex flex-row justify-content-between">
-        <a href="#" className="card-link" style={{ fontSize: "x-large",    color:'#e1e1e5' }}>
+    <div className="d-flex flex-column" style={{margin:'16px'}}>
+      <div className="d-flex flex-row justify-content-between align-items-center" style={{marginBottom:'5px'}}>
+        <a href="#" className="card-link" style={{ fontSize: "x-large",  textDecoration: 'none',  color:'#e1e1e5' }}>
           {comment.User.username}
         </a>
         <div style={{color:'#e1e1e5' }}>{dayjs(comment.createdAt).fromNow()}</div>
