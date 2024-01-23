@@ -269,16 +269,23 @@ const ReadOnlyProfile = ({ audioContext }) => {
               <div>
                 <img
                   className="profile-image"
-                  style={{ height: '100px' }}
+                  style={{   
+                    borderRadius: '50%',
+                    width: '100px',
+                    height: '100px',
+                    marginTop: '10px',
+                    marginBottom: '10px',
+                    objectFit: 'fill',
+                  }}
                   src={selectedUserInfo[0].user.profileImgUrl}
                   alt="user profile image"
                 />
               </div>
-              <div className="user-profile-info" style={{display:'flex', flexDirection:'column', flexWrap:'wrap'}}>
-                <h2 style={{ color: '#0f0c0c', fontSize: '2rem', fontFamily:'headerFont', marginTop:'.5rem' }}>
+              <div className="user-profile-info" style={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap' }}>
+                <h2 style={{ color: '#0f0c0c', fontSize: '2rem', fontFamily: 'headerFont', marginTop: '.5rem' }}>
                   {selectedUserInfo[0].user.username}
                 </h2>
-                <div style={{width:'500px', overflow:'wrap'}}>{selectedUserInfo[0].user.userBio}</div>
+                <div style={{ width: '500px', overflow: 'wrap' }}>{selectedUserInfo[0].user.userBio}</div>
               </div>
               {following ? (
                 <IoPersonRemoveOutline

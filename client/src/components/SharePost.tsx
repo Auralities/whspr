@@ -68,10 +68,10 @@ export const SharePost: React.FC<SharePostProps> = ({ audioContext, userId, post
               <img src={postObj.user.profileImgUrl}  
               className='rounded-circle'
               style={{
-                width: 'auto',
+                width: '35px',
                 height: '35px',
                 margin: '10px',
-                objectFit: 'scale-down',
+                objectFit: 'fill',
                 borderStyle: 'solid',
                 borderColor: '#3c3556',
               }}/>
@@ -94,10 +94,10 @@ export const SharePost: React.FC<SharePostProps> = ({ audioContext, userId, post
                       className='rounded-circle'
                       alt="follower profile image"
                       style={{  
-                        width: 'auto',
+                        width: '35px',
                         height: '35px',
                         margin: '10px',
-                        objectFit: 'scale-down',
+                        objectFit: 'fill',
                         borderStyle: 'solid',
                         borderColor: '#3c3556',
                         
@@ -129,10 +129,10 @@ export const SharePost: React.FC<SharePostProps> = ({ audioContext, userId, post
                       alt="follower profile image"
                       className='rounded-circle'
                       style={{
-                        width: 'auto',
+                        width: '35px',
                         height: '35px',
                         margin: '.5rem 1rem .5rem 1rem',
-                        objectFit: 'scale-down',
+                        objectFit: 'fill',
                         borderStyle: 'solid',
                         borderColor: '#3c3556',
                       }}
