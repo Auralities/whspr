@@ -263,7 +263,7 @@ const WaveSurferComponent: React.FC<WaveSurferProps> = ({
     // })
     wavesurfer.on('ready', (waveDuration) => {
       if (waveDuration > 60) {
-        const seconds = waveDuration % 60;
+        const seconds = Math.floor(waveDuration % 60);
         const minutes = Math.floor(waveDuration / 60);
         setDuration(`${minutes}:${seconds}`);
       } else {
