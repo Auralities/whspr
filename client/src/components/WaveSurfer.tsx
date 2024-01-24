@@ -263,7 +263,7 @@ const WaveSurferComponent: React.FC<WaveSurferProps> = ({
     // })
     wavesurfer.on('ready', (waveDuration) => {
       if (waveDuration > 60) {
-        const seconds = waveDuration % 60;
+        const seconds = Math.floor(waveDuration % 60);
         const minutes = Math.floor(waveDuration / 60);
         setDuration(`${minutes}:${seconds}`);
       } else {
@@ -326,10 +326,10 @@ const WaveSurferComponent: React.FC<WaveSurferProps> = ({
                     src={postObj.user.profileImgUrl}
                     className="rounded-circle"
                     style={{
-                      width: 'auto',
+                      width: onConch ? '35px' : '70px',
                       height: onConch ? '35px' : '70px',
                       margin: onConch ? '10px' : '20px',
-                      objectFit: 'scale-down',
+                      objectFit: 'fill',
                       borderStyle: 'solid',
                       borderWidth: 'medium',
                       borderColor: '#3c3556',
