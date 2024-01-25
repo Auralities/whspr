@@ -208,7 +208,7 @@ io.on('connection', (socket) => {
 
 
   socket.on('sendUser', (user) => {
-
+    console.log('sockus', user)
     io.emit('recieveUser', user)
   })
 

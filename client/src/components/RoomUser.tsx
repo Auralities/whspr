@@ -38,17 +38,15 @@ const RoomUser = ({audioStream, audioContext, image, muted}) => {
 
         <AudioAnalyser audioStream={stream} audioContext={audioContext}/>
 
-              {mute ?  <button
-                type="button"
-                style={{margin: '15px'}}
-        className='btn btn-dark'
-        onClick={() => {muted()}}
-        >Unmute</button> : <button
-        type="button"
-        style={{margin: '15px'}}
-        className='btn btn-light'
-        onClick={() => {muted()}}
-        >Mute</button>}
+              {mute ?  <img
+            onClick={muted}
+            src={require('../style/mute.svg')}
+            style={{width: '50px', margin: '20px', justifyContent: 'right'}}
+          /> :<img
+          onClick={muted}
+          src={require('../style/unmute.svg')}
+          style={{width: '50px', margin: '20px', justifyContent: 'right'}}
+        />}
         </div>
         </div>
     )

@@ -51,7 +51,7 @@ const Room = ({  host, id,  audioContext }) => {
             console.log('zero', listeners)
           }
         })
-        createChannel(channelName, uid, '007eJxTYOj8fWnTO/mg+TlWgcG1EboX11Xm+Mp+e3boR9WcPa0LlpgrMCQaJyUbmJgmWphZWphYmJtbGKUYpJoZJhmbmllYWpoalUlvSG0IZGQ4fsmflZEBAkF8RoZEBgYAYqUfTQ==', userMediaStream);
+        createChannel(channelName, uid, '007eJxTYDj5/8Lv9x+/XNp3M/a/jcOcfNPri/j3v/x7/MWE+aeO5h5eqMCQaJyUbGBimmhhZmlhYmFubmGUYpBqZphkbGpmYWlpanR586bUhkBGBja7KyyMDBAI4jMyJDIwAAD9kCQ+', userMediaStream);
       } catch (error) {
         console.log('Error initializing user media:', error);
       }
@@ -89,7 +89,7 @@ const Room = ({  host, id,  audioContext }) => {
   }
 
   const handleJoinChannel = (stream) => {
-    joinChannel(channelName, uid, '007eJxTYOj8fWnTO/mg+TlWgcG1EboX11Xm+Mp+e3boR9WcPa0LlpgrMCQaJyUbmJgmWphZWphYmJtbGKUYpJoZJhmbmllYWpoalUlvSG0IZGQ4fsmflZEBAkF8RoZEBgYAYqUfTQ==');
+    joinChannel(channelName, uid, '007eJxTYDj5/8Lv9x+/XNp3M/a/jcOcfNPri/j3v/x7/MWE+aeO5h5eqMCQaJyUbGBimmhhZmlhYmFubmGUYpBqZphkbGpmYWlpanR586bUhkBGBja7KyyMDBAI4jMyJDIwAAD9kCQ+');
     startAudio();
   };
 
@@ -167,10 +167,7 @@ const Room = ({  host, id,  audioContext }) => {
        </div>
       
       <br />
-      {/* <button
-      type="button"
-      className='btn btn-dark'
-    onClick={handleLeaveChannel}>Leave Channel</button> */}
+     
       </div>
 
       <div style={{ marginTop: '20px',  alignItems: 'center'}} className='container'>
@@ -186,38 +183,12 @@ const Room = ({  host, id,  audioContext }) => {
                   : <br/>
                   }
                   </div>
-             // <img style={{margin: '15px'}} width="100" src={listener.profileImgUrl} alt="user profile image" />)
-        //       {mute ?  <button
-        //         type="button"
-        //         style={{margin: '15px'}}
-        // className='btn btn-dark'
-        // onClick={() => {muted()}}
-        // >Unmute</button> : <button
-        // type="button"
-        // style={{margin: '15px'}}
-        // className='btn btn-light'
-        // onClick={() => {muted()}}
-        // >Mute</button>}
               )
             
         
       }) : <br></br>
     }
-          {/* <img style={{margin: '15px'}} width="100" src="https://lh3.googleusercontent.com/a/ACg8ocI6UOrLKNPeKzMpAobwFfMo2jVBc2SccK66hzTPMkEk=s96-c" alt="user profile image" />
-       {mute ?  <button
-        type="button"
-        style={{margin: '15px'}}
-        className='btn btn-dark'
-        onClick={() => {muted()}}
-        >Unmute</button> : <button
-        type="button"
-        style={{margin: '15px'}}
-        className='btn btn-light'
-        onClick={() => {muted()}}
-        >Mute</button>} */}
 
-
-        
           
         </div>
 

@@ -219,7 +219,7 @@ router.get(
 router.get('/radio/:name', async (req: Request, res: Response) => {
   const {name} = req.params
 
-  console.log('hete', name)
+ 
   try {
     const getRadio = Radio.findAll({
       where: {
@@ -227,7 +227,6 @@ router.get('/radio/:name', async (req: Request, res: Response) => {
       }
     })
     getRadio.then((info) => {
-      console.log('gotten', info)
       res.send(info).status(200)
     })
     //console.log('gotten', getRadio)
@@ -536,14 +535,12 @@ router.get('/home', async (req: Request, res: Response) => {
 })
 router.get('/use/:id', async (req: Request, res: Response) => {
   const {id} = req.params
-  console.log('hi')
   try{
     const users = await User.findOne({
       where: {
         id
       }
     })
-    console.log("usee" ,users)
     res.status(200).send(users)
   
   }catch(error){
@@ -555,10 +552,9 @@ router.get('/use/:id', async (req: Request, res: Response) => {
 
 
 router.get('/users', async (req: Request, res: Response) => {
-  console.log('hi')
+
   try{
     const users = await User.findAll()
-    console.log(users)
     res.status(200).send(users)
   
   }catch(error){
@@ -569,7 +565,7 @@ router.get('/users', async (req: Request, res: Response) => {
   })
 
   router.get('/user/:username', async (req: Request, res: Response) => {
-    console.log('hi')
+    
     const {username} = req.params
     try{
       const users = await User.findAll({
@@ -577,7 +573,6 @@ router.get('/users', async (req: Request, res: Response) => {
           username: username
         }
       })
-      console.log(users)
       res.status(200).send(users)
     
     }catch(error){
